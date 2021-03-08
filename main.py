@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Flask, render_template
 
 app = Flask(__name__)
@@ -5,7 +7,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    moj_pozdrav = 'Pozdravljen svet!'
+    trenutno_leto = datetime.now().year
+
+    vsi_uporabniki = ['Janez', 'Micka', 'Špelca', 'Alfonzija']
+
+    return render_template('index.html', pozdrav=moj_pozdrav, leto=trenutno_leto, uporabniki=vsi_uporabniki)
 
 
 @app.route('/about')

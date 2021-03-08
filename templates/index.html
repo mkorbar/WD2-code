@@ -4,6 +4,12 @@
     {% block content %}
 
     <h1>To je s HTMLjem obogatena stran</h1>
-    <p>Ko bom velik, bom Google</p>
+    <h2>{{ pozdrav }}</h2>
+    <p>Ko bom velik, bom Google, v {{ leto }} pa še ne.</p>
 
+<ul>
+    {% for uporabnik in uporabniki %}
+        <li>{{ uporabnik }}</li>
+    {% endfor %}
+</ul>
     {% endblock content %}
