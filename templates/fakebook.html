@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Matej Korbar | Fakebook</title>
-    </head>
-    
-    <body>
-    <ul>
-        <li><a href="/">domov</a></li>
-        <li><a href="/portfolio">portfolio</a></li>
-    </ul>
+{% extends "base.html" %}
+
+
+    {% block content %}
+
         <h1><i>FAKEBOOK</i></h1>
         Search: <input type="text" placeholder="Search by name">
         
@@ -28,5 +22,5 @@
         <p><strong>Hobby:</strong> sleeping</p>
         <p><strong>FB friends:</strong> 2341234235234523454235</p>
         <p><strong>FB enemies:</strong> -15</p>
-    </body>
-</html>
+
+    {% endblock content %}
