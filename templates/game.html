@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+
+    {% block content %}
+
+    <h1>Ugani skrito število</h1>
+    <form action="result" method="post">
+        <input name="guess" type="number" min="1" max="30">
+        <button type="submit">Pošlji</button>
+    </form>
+    {% endblock content %}
