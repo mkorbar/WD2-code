@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+
+    {% block content %}
+
+    <h1>Prijavi se v igro</h1>
+    <form action="login" method="post">
+        <input type="text" name="user-name" placeholder="Janez">
+        <input type="email" name="user-email" placeholder="janez@example.si">
+        <button type="submit">Začni</button>
+    </form>
+    {% endblock content %}

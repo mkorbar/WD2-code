@@ -1,56 +1,47 @@
-from datetime import datetime
 import random
-
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, redirect, url_for
+from models import User, db
 
 app = Flask(__name__)
+db.create_all()
+
+MAX_SECRET = 30
+
+
+def get_user(user_email=None):
+    if not user_email:
+        user_email = request.cookies.get('email')
+    return db.query(User).filter_by(email=user_email).first()
 
 
 @app.route('/', methods=['GET'])
 def index():
-    moj_pozdrav = 'Pozdravljen svet!'
-    trenutno_leto = datetime.now().year
-
-    vsi_uporabniki = ['Janez', 'Micka', 'Špelca', 'Alfonzija']
-
-    return render_template('index.html', pozdrav=moj_pozdrav, leto=trenutno_leto, uporabniki=vsi_uporabniki)
+    user = get_user()
+    return render_template('index.html', user=user, max_secret=MAX_SECRET)
 
 
 @app.route('/about', methods=['GET'])
-def fakebook():
-    return render_template('fakebook.html', data={'name': 'Matej Korbar'})
+def about():
+    return render_template('about.html')
 
 
-@app.route('/portfolio', methods=['GET', 'POST'])
-def portfolio():
-    if request.method == 'POST':
-
-        name = request.form.get('commentator-name')
-        email = request.form.get('commentator-email')
-        content = request.form.get('comment-content')
-
-        print(name)
-        print(email)
-        print(content)
-
-        response = make_response(render_template('success.html'))
-        response.set_cookie('user_name', name)
-
-        return response
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        response = render_template('login.html')
     else:
-        name = request.cookies.get('user_name')
+        name = request.form.get('user-name')
+        email = request.form.get('user-email')
 
-        return render_template('porfolio.html', uname=name)
+        user = get_user(user_email=email)
+        if not user:
+            secret = random.randint(1, MAX_SECRET)
+            user = User(name=name, email=email, secret_number=secret)
+            db.add(user)
+            db.commit()
 
-
-@app.route("/game", methods=["GET"])
-def game():
-    secret_number = request.cookies.get("secret_number")  # check if there is already a cookie named secret_number
-
-    response = make_response(render_template("game.html"))
-    if not secret_number:  # if not, create a new cookie
-        new_secret = random.randint(1, 30)
-        response.set_cookie("secret_number", str(new_secret))
+        response = make_response(redirect(url_for('index')))
+        response.set_cookie('email', user.email)
 
     return response
 
@@ -58,18 +49,22 @@ def game():
 @app.route("/result", methods=["POST"])
 def result():
     guess = int(request.form.get("guess"))
-    secret_number = int(request.cookies.get("secret_number"))
+    user = get_user()
+    if not user:
+        return redirect(url_for('login'))
 
-    if guess == secret_number:
-        message = "Correct! The secret number is {0}".format(str(secret_number))
+    if guess == user.secret_number:
+        message = "Pravilno! Skrito število je {0}".format(str(user.secret_number))
         response = make_response(render_template("result.html", message=message))
-        response.set_cookie("secret_number", str(random.randint(1, 30)))  # set the new secret number
+        user.secret_number = random.randint(1, MAX_SECRET)
+        db.add(user)
+        db.commit()
         return response
-    elif guess > secret_number:
-        message = "Your guess is not correct... try something smaller."
+    elif guess > user.secret_number:
+        message = "Ta poizkus ni pravilen. Poizkusi z manjšo številko."
         return render_template("result.html", message=message)
-    elif guess < secret_number:
-        message = "Your guess is not correct... try something bigger."
+    elif guess < user.secret_number:
+        message = "Ta poizkus ni pravilen. Poizkusi z večjo številko."
         return render_template("result.html", message=message)
 
 
