@@ -5,8 +5,14 @@
 
     <h1>Prijavi se v igro</h1>
     <form action="login" method="post">
-        <input type="text" name="user-name" placeholder="Janez">
-        <input type="email" name="user-email" placeholder="janez@example.si">
-        <button type="submit">Začni</button>
+        <div class="mb-3">
+            <label class="form-label" for="user-name">Ime</label>
+            <input class="form-control" type="text" id="user-name" name="user-name" placeholder="Janez">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="user-email">Email</label>
+            <input class="form-control" type="email" id="user-email" name="user-email" placeholder="janez@example.si">
+        </div>
+        <button type="submit" class="btn btn-primary">Začni</button>
     </form>
     {% endblock content %}

@@ -55,17 +55,17 @@ def result():
 
     if guess == user.secret_number:
         message = "Pravilno! Skrito število je {0}".format(str(user.secret_number))
-        response = make_response(render_template("result.html", message=message))
+        response = make_response(render_template("result.html", finished=True, message=message))
         user.secret_number = random.randint(1, MAX_SECRET)
         db.add(user)
         db.commit()
         return response
     elif guess > user.secret_number:
         message = "Ta poizkus ni pravilen. Poizkusi z manjšo številko."
-        return render_template("result.html", message=message)
+        return render_template("result.html", finished=False, message=message)
     elif guess < user.secret_number:
         message = "Ta poizkus ni pravilen. Poizkusi z večjo številko."
-        return render_template("result.html", message=message)
+        return render_template("result.html", finished=False,  message=message)
 
 
 if __name__ == '__main__':

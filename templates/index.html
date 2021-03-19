@@ -8,8 +8,15 @@
 
 <p>Pozdravljen {{ user.name }}!</p>
 <form action="result" method="post">
-    <input type="number" name="guess" min="1" max="{{max_secret}}">
-    <button type="submit">Ugibaj</button>
+    <div class="row mt-5">
+        <div class="col-8">
+            <input class="form-control form-control-lg" type="number" name="guess" id="guess" min="1"
+                   max="{{max_secret}}">
+        </div>
+        <div class="col-4">
+            <button class="btn btn-primary btn-lg" type="submit">Ugibaj</button>
+        </div>
+    </div>
 </form>
 {% else %}
 

@@ -3,7 +3,13 @@
 
     {% block content %}
 
+    {% if finished %}
+        <h1>Čestitke!</h1>
+    {% else %}
+        <h1>Narobe ...</h1>
+    {% endif %}
+
     <p>{{ message }}</p>
-    <a href="/">Nazaj</a>
+    <a class="btn btn-success" href="/">Nazaj</a>
 
     {% endblock content %}
