@@ -1,6 +1,7 @@
 import random
 from flask import Flask, render_template, request, make_response, redirect, url_for
 from models import User, db
+import uuid
 
 app = Flask(__name__)
 db.create_all()
@@ -8,10 +9,10 @@ db.create_all()
 MAX_SECRET = 30
 
 
-def get_user(user_email=None):
-    if not user_email:
-        user_email = request.cookies.get('email')
-    return db.query(User).filter_by(email=user_email).first()
+def get_user(user_token=None):
+    if not user_token:
+        user_token = request.cookies.get('token')
+    return db.query(User).filter_by(session_token=user_token).first()
 
 
 @app.route('/', methods=['GET'])
@@ -32,16 +33,25 @@ def login():
     else:
         name = request.form.get('user-name')
         email = request.form.get('user-email')
+        password = request.form.get('user-pass')
 
-        user = get_user(user_email=email)
+        user = db.query(User).filter_by(email=email).first()
         if not user:
             secret = random.randint(1, MAX_SECRET)
-            user = User(name=name, email=email, secret_number=secret)
+            user = User(name=name, email=email, secret_number=secret, passwd=password)
             db.add(user)
             db.commit()
 
+        if password != user.passwd:
+            return "Napačno geslo!!!!"
+
+        token = str(uuid.uuid4())
+        user.session_token = token
+        db.add(user)
+        db.commit()
+
         response = make_response(redirect(url_for('index')))
-        response.set_cookie('email', user.email)
+        response.set_cookie('token', token, httponly=True, samesite='strict')
 
     return response
 
