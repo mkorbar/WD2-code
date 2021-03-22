@@ -2,6 +2,7 @@ import random
 from flask import Flask, render_template, request, make_response, redirect, url_for
 from models import User, db
 import uuid
+import hashlib
 
 app = Flask(__name__)
 db.create_all()
@@ -33,7 +34,8 @@ def login():
     else:
         name = request.form.get('user-name')
         email = request.form.get('user-email')
-        password = request.form.get('user-pass')
+        password = str(request.form.get('user-pass'))
+        password = hashlib.sha256(password.encode()).hexdigest()
 
         user = db.query(User).filter_by(email=email).first()
         if not user:
