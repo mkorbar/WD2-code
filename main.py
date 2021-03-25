@@ -110,7 +110,7 @@ def profile_edit():
 
 
 # todo: change method to POST
-@app.route("/profile/delete", methods=["GET"])
+@app.route("/profile/delete", methods=["GET", "POST"])
 def profile_delete():
     token = request.cookies.get('token')
     user = db.query(User).filter_by(session_token=token).first()
@@ -118,10 +118,13 @@ def profile_delete():
     if not user:
         return redirect(url_for('login'))
     else:
-        db.delete(user)
-        db.commit()
+        if request.method == "GET":
+            return render_template("profile_delete.html")
+        else:
+            db.delete(user)
+            db.commit()
 
-        return render_template("deleted.html")
+            return render_template("deleted.html")
 
 
 @app.route("/users")
