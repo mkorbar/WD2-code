@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<h1>Tvoj profil</h1>
+<ul class="list-group mb-3">
+    <li class="list-group-item"><strong>Uporabniško ime:</strong> {{ user_data.name }}</li>
+    <li class="list-group-item"><strong>Email:</strong> {{ user_data.email }}</li>
+</ul>
+<a href="/profile/edit" class="btn btn-primary">Uredi</a>
+<a href="/profile/delete" class="btn btn-danger">Izbriši profil</a>
+{% endblock content %}
