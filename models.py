@@ -1,14 +1,18 @@
-import os
-from sqla_wrapper import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Integer, String
+from sqlalchemy.orm import DeclarativeBase, mapped_column
 
-# this connects to a database either on Heroku or on localhost
-db = SQLAlchemy(os.getenv("DATABASE_URL", "sqlite:///localhost.sqlite"))
+
+class Base(DeclarativeBase):
+    pass
+
+db = SQLAlchemy(model_class=Base)
 
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True)
-    email = db.Column(db.String, unique=True)
-    secret_number = db.Column(db.Integer)
-    passwd = db.Column(db.String)
-    session_token = db.Column(db.String)
+    id = mapped_column(Integer, primary_key=True)
+    name = mapped_column(String, unique=True, nullable=False)
+    email = mapped_column(String, unique=True)
+    secret_number = mapped_column(Integer)
+    passwd = mapped_column(String(40))
+    session_token = mapped_column(String(40))
