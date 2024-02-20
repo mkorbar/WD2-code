@@ -2,12 +2,15 @@ import os
 import random
 from flask import Flask, render_template, request, make_response, redirect, url_for
 from models import User, db
+from api.todo.todo import todo_bp
 import uuid
 import hashlib
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///local_db.sqlite")
+
+app.register_blueprint(todo_bp, url_prefix='/api/v1/todo')
 db.init_app(app)
 
 with app.app_context():
@@ -142,7 +145,6 @@ def user_detail(user_id):
     logged_in_user = get_user(user_token=request.cookies.get('token'))
 
     return render_template("profile.html", user_data=user, is_my_account=user.id==logged_in_user.id)
-
 
 
 @app.route("/user/edit", methods=["GET", "POST"])
