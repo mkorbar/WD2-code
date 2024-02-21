@@ -85,3 +85,8 @@ def todo(id):
         return res
 
 
+@todo_bp.errorhandler(404)
+def not_found(e):
+    response = jsonify({'error': 'not found', 'status_code': 404})
+    response.status_code = 404
+    return response
