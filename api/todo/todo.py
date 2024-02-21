@@ -37,7 +37,7 @@ def create_todo(data):
     db.session.add(todo)
     db.session.commit()
 
-    return jsonify(row_to_dict(todo))
+    return row_to_dict(todo)
 
 
 def update_todo(data, id):

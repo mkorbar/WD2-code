@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///local_db.sqlite")
 
-app.register_blueprint(todo_bp, url_prefix='/api/v1/todo')
+app.register_blueprint(todo_bp, url_prefix='/api/v1/todos')
 db.init_app(app)
 
 with app.app_context():
