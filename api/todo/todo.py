@@ -4,6 +4,9 @@ import json
 from flask import Blueprint, request, jsonify
 
 from models import db, Todo
+from api.authentication import AuthError, requires_auth
+
+
 
 
 def row_to_dict(row):
@@ -73,7 +76,9 @@ def todos_get():
 
 
 @todo_bp.route('/', methods=['POST'])
-def todos_create():
+@requires_auth
+def todos_create(current_user=None):
+    print(current_user)
     return jsonify(create_todo(data=request.data))
 
 
@@ -99,4 +104,11 @@ def todo_delete(id):
 def not_found(e):
     response = jsonify({'error': 'not found', 'status_code': 404})
     response.status_code = 404
+    return response
+
+
+@todo_bp.errorhandler(AuthError)
+def handle_auth_error(ex):
+    response = jsonify(ex.error)
+    response.status_code = ex.status_code
     return response
