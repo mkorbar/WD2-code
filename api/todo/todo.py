@@ -1,5 +1,8 @@
-import datetime, json
-from flask import Blueprint, request, jsonify, app
+import datetime
+import json
+
+from flask import Blueprint, request, jsonify
+
 from models import db, Todo
 
 
@@ -64,25 +67,32 @@ def delete_todo(id):
 todo_bp = Blueprint('todo', __name__)
 
 
-@todo_bp.route('/', methods=['GET', 'POST'])
-def todo_all():
-    if request.method == 'GET':
-        return jsonify(get_todos())
-    if request.method == 'POST':
-        return jsonify(create_todo(data=request.data))
+@todo_bp.route('/', methods=['GET'])
+def todos_get():
+    return jsonify(get_todos())
 
 
-@todo_bp.route('/<id>', methods=['GET', 'PUT', 'DELETE'])
-def todo(id):
-    if request.method == 'GET':
-        return jsonify(get_todo(id))
-    if request.method == 'PUT':
-        return jsonify(update_todo(data=request.data, id=id))
-    if request.method == 'DELETE':
-        delete_todo(id)
-        res = jsonify(None)
-        res.status_code = 204
-        return res
+@todo_bp.route('/', methods=['POST'])
+def todos_create():
+    return jsonify(create_todo(data=request.data))
+
+
+@todo_bp.route('/<id>', methods=['GET'])
+def todo_get(id):
+    return jsonify(get_todo(id))
+
+
+@todo_bp.route('/<id>', methods=['PUT'])
+def todo_update(id):
+    return jsonify(update_todo(data=request.data, id=id))
+
+
+@todo_bp.route('/<id>', methods=['DELETE'])
+def todo_delete(id):
+    delete_todo(id)
+    res = jsonify(None)
+    res.status_code = 204
+    return res
 
 
 @todo_bp.errorhandler(404)

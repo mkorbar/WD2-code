@@ -3,6 +3,7 @@ import random
 from flask import Flask, render_template, request, make_response, redirect, url_for
 from models import User, db
 from api.todo.todo import todo_bp
+
 import uuid
 import hashlib
 
@@ -34,7 +35,6 @@ def get_user(user_token=None, email=None):
 def get_all_users():
     select_query = db.select(User)
     return db.session.execute(select_query).scalars().all()
-
 
 
 @app.route('/', methods=['GET'])
