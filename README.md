@@ -1,5 +1,5 @@
-# Lesson 3 - API authentication
+# Lesson 4 - File upload
 
-This is the starting code for lesson 3 and the solution to the lesson 2 homework.
+This is the starting code for lesson 4 and the solution to the lesson 3.
 
-Check lesson 4 if for the progress in this lesson. 
+Check lesson 5 if for the progress in this lesson. 
