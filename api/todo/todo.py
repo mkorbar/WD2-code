@@ -2,7 +2,7 @@ import datetime
 import json
 import os
 
-from flask import Blueprint, request, jsonify, redirect, url_for, send_file
+from flask import Blueprint, request, jsonify, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 
 from models import db, Todo
@@ -119,19 +119,18 @@ def upload_file():
         # check if the post request has the file part
         if 'file' not in request.files:
             print('No file part')
-            return 'No file part'
+            return jsonify({'error': 'No file in request'})
         file = request.files['file']
 
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
             print('No selected file')
-            return 'No selected file'
+            return jsonify({'error': 'No file was selected'})
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
 
-            # TODO: remove hardcoded:
             file.save(os.path.join(UPLOAD_FOLDER, filename))
 
             path = url_for('todo.files', filename=filename)
@@ -140,7 +139,7 @@ def upload_file():
 
 @todo_bp.get('/files/<filename>')
 def files(filename=None):
-    return send_file(os.path.join(UPLOAD_FOLDER, filename))
+    return send_from_directory(UPLOAD_FOLDER, filename)
 
 @todo_bp.errorhandler(404)
 def not_found(e):
