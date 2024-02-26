@@ -1,12 +1,21 @@
 import datetime
 import json
+import os
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, redirect, url_for, send_file
+from werkzeug.utils import secure_filename
 
 from models import db, Todo
 from api.authentication import AuthError, requires_auth
 
 
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+UPLOAD_FOLDER = './uploads'
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def row_to_dict(row):
@@ -67,6 +76,12 @@ def delete_todo(id):
     return row_to_dict(todo)
 
 
+
+##################################################
+#                  controllers                   #
+##################################################
+
+
 todo_bp = Blueprint('todo', __name__)
 
 
@@ -99,6 +114,33 @@ def todo_delete(id):
     res.status_code = 204
     return res
 
+@todo_bp.post('/upload')
+def upload_file():
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            print('No file part')
+            return 'No file part'
+        file = request.files['file']
+
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            print('No selected file')
+            return 'No selected file'
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+
+            # TODO: remove hardcoded:
+            file.save(os.path.join(UPLOAD_FOLDER, filename))
+
+            path = url_for('todo.files', filename=filename)
+            return jsonify({'message': 'File upload succsessfull','path': path})
+
+
+@todo_bp.get('/files/<filename>')
+def files(filename=None):
+    return send_file(os.path.join(UPLOAD_FOLDER, filename))
 
 @todo_bp.errorhandler(404)
 def not_found(e):

@@ -2,7 +2,7 @@ import os
 import random
 from flask import Flask, render_template, request, make_response, redirect, url_for
 from models import User, db
-from api.todo.todo import todo_bp
+from api.todo.todo import todo_bp, UPLOAD_FOLDER
 
 import uuid
 import hashlib
@@ -10,6 +10,9 @@ import hashlib
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///local_db.sqlite")
+
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.register_blueprint(todo_bp, url_prefix='/api/v1/todos')
 db.init_app(app)
