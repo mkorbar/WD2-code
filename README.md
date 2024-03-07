@@ -1,5 +1,5 @@
-# Lesson 5 - Back-end processing and cron
+# Lesson 6 - Recap
 
-This is the starting code for lesson 5 and the solution to the lesson 4.
+This is the starting code for lesson 6 and the solution to the lesson 5.
 
-Check lesson 6 for the progress in this lesson.
+Check lesson 7 for the progress in this lesson.
