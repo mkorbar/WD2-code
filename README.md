@@ -1,5 +1,5 @@
-# Lesson 3 - API authentication
+# Lesson <> - undefined lesson
 
-This is the starting code for lesson 3 and the solution to the lesson 2 homework.
+This is the starting code for lesson 0 and the solution to the lesson -1 homework.
 
-Check lesson 4 if for the progress in this lesson. 
+Check lesson -1 if for the progress in this lesson. 
