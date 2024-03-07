@@ -1,5 +1,5 @@
-# Lesson <> - undefined lesson
+# Lesson 08 - inner working
 
-This is the starting code for lesson 0 and the solution to the lesson -1 homework.
+This is the starting code for lesson 8 and the solution to the lesson 7 homework.
 
-Check lesson -1 if for the progress in this lesson. 
+Check lesson 7 if for the progress in this lesson. 
